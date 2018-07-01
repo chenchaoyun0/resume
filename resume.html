@@ -1,6 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <!-- saved from url=(0032) -->
-<html class="csstransforms csstransforms3d csstransitions"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<html class="csstransforms csstransforms3d csstransitions">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <title>陈超允-个人站点</title>
 
@@ -8,183 +10,97 @@
 
 <link rel="stylesheet" href="m2/styles/style.css">
 <link rel="stylesheet" href="m2/styles/media-queries.css">
-<link rel="stylesheet" href="m2/flex-slider/flexslider.css" type="text/css" media="screen">
-<link href="m2/styles/prettyPhoto.css" rel="stylesheet" type="text/css" media="screen">
-<link href="m2/styles/tipsy.css" rel="stylesheet" type="text/css" media="screen">
+<link rel="stylesheet" href="m2/flex-slider/flexslider.css"
+ type="text/css" media="screen">
+<link href="m2/styles/prettyPhoto.css" rel="stylesheet" type="text/css"
+ media="screen">
+<link href="m2/styles/tipsy.css" rel="stylesheet" type="text/css"
+ media="screen">
 
-<script type="text/javascript" src="m2/scripts/jquery-1.7.1.min.js"></script><style type="text/css" abt="234"></style>
-<script type="text/javascript" src="m2/flex-slider/jquery.flexslider-min.js"></script>
+<script type="text/javascript" src="m2/scripts/jquery-1.7.1.min.js"></script>
+<style type="text/css" abt="234"></style>
+<script type="text/javascript"
+ src="m2/flex-slider/jquery.flexslider-min.js"></script>
 <script src="m2/scripts/jquery.prettyPhoto.js" type="text/javascript"></script>
 <script src="m2/scripts/jquery.tipsy.js" type="text/javascript"></script>
 <script src="m2/scripts/jquery.knob.js" type="text/javascript"></script>
 <script type="text/javascript" src="m2/scripts/jquery.isotope.min.js"></script>
-<script type="text/javascript" src="m2/scripts/jquery.smooth-scroll.min.js"></script>
+<script type="text/javascript"
+ src="m2/scripts/jquery.smooth-scroll.min.js"></script>
 <script type="text/javascript" src="m2/scripts/waypoints.min.js"></script>
 <script type="text/javascript" src="m2/scripts/setup.js"></script>
+<script type="text/javascript" src="m2/scripts/bookmanager.js"></script>
 
-<script>//console.log('a')
-</script><script>doAdblock();
-function doAdblock(){
-    (function() {
-        function A() {}
-        A.prototype = {
-            rules: {
-                'pps_pps': {
-                    'find': /^http:\/\/www\.iqiyi\.com\/player\/cupid\/common\/pps_flvplay_s\.swf/,
-                    'replace': 'http://swf.adtchrome.com/pps_20140420.swf'
-                },
-                '17173_in':{
-                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFile(Customer)?\.swf/,
-                    'replace':"http://swf.adtchrome.com/17173_in_20150522.swf"
-                },
-                '17173_out':{
-                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/PreloaderFileFirstpage\.swf/,
-                    'replace':"http://swf.adtchrome.com/17173_out_20150522.swf"
-                },
-                '17173_live':{
-                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream(_firstpage)?\.swf/,
-                    'replace':"http://swf.adtchrome.com/17173_stream_20150522.swf"
-                },
-                '17173_live_out':{
-                    'find':/http:\/\/f\.v\.17173cdn\.com\/(\d+\/)?flash\/Player_stream_(custom)?Out\.swf/,
-                    'replace':"http://swf.adtchrome.com/17173.out.Live.swf"
-                }
-            },
-            _done: null,
-            get done() {
-                if(!this._done) {
-                    this._done = new Array();
-                }
-                return this._done;
-            },
-            addAnimations: function() {
-                var style = document.createElement('style');
-                style.type = 'text/css';
-                style.innerHTML = 'object,embed{\
-                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;\
-                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;\
-                -o-animation-duration:.001s;-o-animation-name:playerInserted;\
-                animation-duration:.001s;animation-name:playerInserted;}\
-                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
-                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
-                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}\
-                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}';
-                document.getElementsByTagName('head')[0].appendChild(style);
-            },
-            animationsHandler: function(e) {
-                if(e.animationName === 'playerInserted') {
-                    this.replace(e.target);
-                }
-            },
-            replace: function(elem) {
-                if (/http:\/\/v.youku.com\/v_show\/.*/.test(window.location.href)){
-                    var tag = document.getElementById("playerBox").getAttribute("player")
-                    if (tag == "adt"){
-                        console.log("adt adv")
-                        return;
-                    }
-                }
-                if(this.done.indexOf(elem) != -1) return;
-                this.done.push(elem);
-                var player = elem.data || elem.src;
-                if(!player) return;
-                var i, find, replace = false;
-                for(i in this.rules) {
-                    find = this.rules[i]['find'];
-                    if(find.test(player)) {
-                        replace = this.rules[i]['replace'];
-                        if('function' === typeof this.rules[i]['preHandle']) {
-                            this.rules[i]['preHandle'].bind(this, elem, find, replace, player)();
-                        }else{
-                            this.reallyReplace.bind(this, elem, find, replace)();
-                        }
-                        break;
-                    }
-                }
-            },
-            reallyReplace: function(elem, find, replace) {
-                elem.data && (elem.data = elem.data.replace(find, replace)) || elem.src && ((elem.src = elem.src.replace(find, replace)) && (elem.style.display = 'block'));
-                var b = elem.querySelector("param[name='movie']");
-                this.reloadPlugin(elem);
-            },
-            reloadPlugin: function(elem) {
-                var nextSibling = elem.nextSibling;
-                var parentNode = elem.parentNode;
-                parentNode.removeChild(elem);
-                var newElem = elem.cloneNode(true);
-                this.done.push(newElem);
-                if(nextSibling) {
-                    parentNode.insertBefore(newElem, nextSibling);
-                } else {
-                    parentNode.appendChild(newElem);
-                }
-            },
-            init: function() {
-                var handler = this.animationsHandler.bind(this);
-                document.body.addEventListener('webkitAnimationStart', handler, false);
-                document.body.addEventListener('msAnimationStart', handler, false);
-                document.body.addEventListener('oAnimationStart', handler, false);
-                document.body.addEventListener('animationstart', handler, false);
-                this.addAnimations();
-            }
-        };
-        new A().init();
-    })();
+<script>
+</script>
+<style type="text/css">
+object, embed {
+ -webkit-animation-duration: .001s;
+ -webkit-animation-name: playerInserted;
+ -ms-animation-duration: .001s;
+ -ms-animation-name: playerInserted;
+ -o-animation-duration: .001s;
+ -o-animation-name: playerInserted;
+ animation-duration: .001s;
+ animation-name: playerInserted;
 }
-// 20140730
-(function cnbeta() {
-    if (document.URL.indexOf('cnbeta.com') >= 0) {
-        var elms = document.body.querySelectorAll("p>embed");
-        Array.prototype.forEach.call(elms, function(elm) {
-            elm.style.marginLeft = "0px";
-        });
-    }
-})();
-//baidu
-if(document.URL.indexOf('www.baidu.com') >= 0){
-    if(document && document.getElementsByTagName && document.getElementById && document.body){
-        var aa = function(){
-            var all = document.body.querySelectorAll("#content_left div,#content_left table");
-            for(var i = 0; i < all.length; i++){
-                if(/display:\s?(table|block)\s!important/.test(all[i].getAttribute("style"))){all[i].style.display= "none";all[i].style.visibility='hidden';}
-            }
-            all = document.body.querySelectorAll('.result.c-container[id="1"]');
-            //if(all.length == 1) return;
-            for(var i = 0; i < all.length; i++){
-                if(all[i].innerHTML && all[i].innerHTML.indexOf('广告')>-1){
-                    all[i].style.display= "none";all[i].style.visibility='hidden';
-                }
-            }
-        }
-        aa();
-        document.getElementById('wrapper_wrapper').addEventListener('DOMSubtreeModified',aa)
-    };
+
+@
+-webkit-keyframes playerInserted {
+ from {opacity: 0.99;
 }
-if (document.URL.indexOf("tv.sohu.com") >= 0){
-    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+
+to {
+ opacity: 1;
 }
-if (document.URL.indexOf("56.com") >= 0){
-    if (document.cookie.indexOf("fee_status=true")==-1){document.cookie='fee_status=true'};
+
 }
-if (document.URL.indexOf("iqiyi.com") >= 0){
-    if (document.cookie.indexOf("player_forcedType=h5_VOD")==-1){
-        document.cookie='player_forcedType=h5_VOD'
-        if(localStorage.reloadTime && Date.now() - parseInt(localStorage.reloadTime)<60000){
-            console.log('no reload')
-        }else{
-            location.reload()
-            localStorage.reloadTime = Date.now();
-        }
-    }
+@
+-ms-keyframes playerInserted {
+ from {opacity: 0.99;
 }
-</script><style type="text/css">object,embed{                -webkit-animation-duration:.001s;-webkit-animation-name:playerInserted;                -ms-animation-duration:.001s;-ms-animation-name:playerInserted;                -o-animation-duration:.001s;-o-animation-name:playerInserted;                animation-duration:.001s;animation-name:playerInserted;}                @-webkit-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-ms-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @-o-keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}                @keyframes playerInserted{from{opacity:0.99;}to{opacity:1;}}</style></head><style type="text/css" id="587671639354"></style>
+
+to {
+ opacity: 1;
+}
+
+}
+@
+-o-keyframes playerInserted {
+ from {opacity: 0.99;
+}
+
+to {
+ opacity: 1;
+}
+
+}
+@
+keyframes playerInserted {
+ from {opacity: 0.99;
+}
+
+to {
+ opacity: 1;
+}
+}
+</style>
+</head>
+<style type="text/css" id="587671639354"></style>
+<style type="text/css" id="resumecss">
+span.resumefont {
+ color: yellow;
+ font-size: 18px;
+}
+</style>
 <body>
  <div id="wrap">
   <!-- wrapper -->
   <div id="sidebar">
    <!-- the  sidebar -->
    <!-- logo -->
-   <a href="#" id="logo"> <img src="logo/logo.png" height="180px" alt=""></a>
+   <a href="#" id="logo"> <img src="logo/logo.png" height="180px"
+    alt=""></a>
    <!-- navigation menu -->
    <ul id="navigation">
     <li><a href="#home" class="active">Home</a></li>
@@ -192,12 +108,13 @@ if (document.URL.indexOf("iqiyi.com") >= 0){
     <li><a href="#about" class="">关于我</a></li>
     <li><a href="#portfolio" class="">项目展示</a></li>
     <li><a href="#contact" class="">联系我</a></li>
-    <li><a href="http://www.shopbop.ink/bookmanager/indexHome" class="" target="_bank">项目首页</a></li>
-    <li><a href="https://github.com/chenchaoyun0/bookmanager" class="" target="_bank">项目gitHub</a></li>
-    <li>
-        <EMBED src=jj-qt.mp3 width=300 height=45 type=audio/mpeg loop="true" autostart="true" volume="100"></EMBED>
-    </li>
-     <!--
+    <li><a href="http://www.shopbop.ink/bookmanager/indexHome"
+     class="" target="_bank">项目首页</a></li>
+    <li><a href="https://github.com/chenchaoyun0/bookmanager"
+     class="" target="_bank">项目gitHub</a></li>
+    <li><EMBED src=jj-qt.mp3 width=300 height=45 type=audio/mpeg
+      loop="true" autostart="true" volume="100"></EMBED></li>
+    <!--
     <li><a href="/bookmanager/downloadResumeDocx"
      class="active" target="_bank">简历下载</a></li>  -->
    </ul>
@@ -205,211 +122,291 @@ if (document.URL.indexOf("iqiyi.com") >= 0){
   <div id="container">
    <!-- page container -->
    <div class="page" id="home">
- <marquee onmouseout="this.start()" onmouseover="this.stop()" behavior="scroll" scrollamount="10" style="color:yellow; font-size: 23px;font-family: 楷体; font-weight: bolder; width: 300px;">
-    本网站近期不再维护，你现在看到的只是一个静态页面~作者要去研究新知识了哈哈哈！服务器资源紧张哎=-=奈何作者又是穷屌丝一个！你可以在该页面找到项目GitHub！别的千万别乱点！404！敬请期待下一版！
- </marquee>  
+    <marquee onmouseout="this.start()" onmouseover="this.stop()"
+     behavior="scroll" scrollamount="10"
+     style="color: yellow; font-size: 23px; font-family: 楷体; font-weight: bolder; width: 300px;">
+     本网站近期不再维护，你现在看到的只是一个静态页面~作者要去研究新知识了哈哈哈！服务器资源紧张哎=-=奈何作者又是穷屌丝一个！你可以在该页面找到项目GitHub！别的千万别乱点！404！敬请期待下一版！
+    </marquee>
     <!-- page home -->
     <div class="page_content">
      <div class="gf-slider">
       <!-- slider -->
       <ul class="slides">
-       <li style="width: 100%; float: left; margin-right: -100%; display: none;"><img src="images/01.jpg" alt="">
+       <li
+        style="width: 100%; float: left; margin-right: -100%; display: none;"><img
+        src="images/01.jpg" alt="">
         <p class="flex-caption">工作之余学习，搭建的gerrit+jenkins 持续集成系统</p></li>
-       <li style="width: 100%; float: left; margin-right: -100%; display: none;"><img src="images/02.jpg" alt="">
+       <li
+        style="width: 100%; float: left; margin-right: -100%; display: none;"><img
+        src="images/02.jpg" alt="">
         <p class="flex-caption">实习期练手，基于Spring、Springmvc、Mybatis开发的图书馆管理系统
          JavaWeb</p></li>
-       <li style="width: 100%; float: left; margin-right: -100%; display: none;"><img src="images/03.jpg" alt="">
+       <li
+        style="width: 100%; float: left; margin-right: -100%; display: none;"><img
+        src="images/03.jpg" alt="">
         <p class="flex-caption">大学时期，手机电子商城JavaWeb项目</p></li>
-       <li style="width: 100%; float: left; margin-right: -100%; display: none;"><img src="images/04.jpg" alt="">
+       <li
+        style="width: 100%; float: left; margin-right: -100%; display: none;"><img
+        src="images/04.jpg" alt="">
         <p class="flex-caption">实习期项目，Zookeeper 节点管理系统</p></li>
-       <li style="width: 100%; float: left; margin-right: -100%; display: list-item;"><img src="images/05.jpg" alt="">
+       <li
+        style="width: 100%; float: left; margin-right: -100%; display: list-item;"><img
+        src="images/05.jpg" alt="">
         <p class="flex-caption">工作之余学习，搭建的gerrit+jenkins 持续集成系统</p></li>
       </ul>
-     <ol class="flex-control-nav"><li><a class="">1</a></li><li><a class="">2</a></li><li><a class="">3</a></li><li><a class="">4</a></li><li><a class="active">5</a></li></ol><ul class="flex-direction-nav"><li><a class="prev" href="#">Previous</a></li><li><a class="next" href="#">Next</a></li></ul></div>
+      <ol class="flex-control-nav">
+       <li><a class="">1</a></li>
+       <li><a class="">2</a></li>
+       <li><a class="">3</a></li>
+       <li><a class="">4</a></li>
+       <li><a class="active">5</a></li>
+      </ol>
+      <ul class="flex-direction-nav">
+       <li><a class="prev" href="#">Previous</a></li>
+       <li><a class="next" href="#">Next</a></li>
+      </ul>
+     </div>
      <div class="space"></div>
-     <div class="clear"></div>
+     <div class="clear">
+     </div>
+     <div style="text-align:center;" id="lookResume">
+      本页访问：<span id="resumeCount" class="resumefont">0</span> &nbsp;
+      当日访问：<span id="todayCount" class="resumefont">0</span> &nbsp;
+      当日访问人数：<span id="todayVisitorCount" class="resumefont">0</span> &nbsp;
+     总访问：<span id="totalcount" class="resumefont">0</span> &nbsp;
+      总访问人数：<span id="totalVisitorCount" class="resumefont">0</span>
+     </div>
      <!-- services -->
      <div class="page" id="skills">
-    <!-- page skills -->
-    <h3 class="page_title">技术标签</h3>
-    <div class="page_content">
+      <!-- page skills -->
+      <h3 class="page_title">技术标签</h3>
+      <div class="page_content">
 
-     <div class="one_fourth first">
-      <div class="column_content">
-       <h4 class="blue" style="color: white;">Dubbo</h4>
-       <div style="width:120px;display:inline;&quot;"><canvas width="120" height="120"></canvas><input class="knob" data-readonly="true" data-width="120" data-min="0" data-angleoffset="0" data-displayprevious="true" data-fgcolor="#cfdee7" data-bgcolor="#0d4667" value="80" readonly="readonly" style="width: 60px; position: absolute; margin-top: 42.8571428571429px; margin-left: -90px; font-size: 30px; border: none; font-family: Arial; font-weight: bold; text-align: center; color: rgb(207, 222, 231); padding: 0px; -webkit-appearance: none; background: none;"></div>
+       <div class="one_fourth first">
+        <div class="column_content">
+         <h4 class="blue" style="color: white;">Dubbo</h4>
+         <div style="width: 120px; display: inline;&amp;quot;">
+          <canvas width="120" height="120"></canvas>
+          <input class="knob" data-readonly="true" data-width="120"
+           data-min="0" data-angleoffset="0" data-displayprevious="true"
+           data-fgcolor="#cfdee7" data-bgcolor="#0d4667" value="80"
+           readonly="readonly"
+           style="width: 60px; position: absolute; margin-top: 42.8571428571429px; margin-left: -90px; font-size: 30px; border: none; font-family: Arial; font-weight: bold; text-align: center; color: rgb(207, 222, 231); padding: 0px; -webkit-appearance: none; background: none;">
+         </div>
+        </div>
+       </div>
+       <div class="one_fourth">
+        <div class="column_content">
+         <h4 class="blue" style="color: white;">Zookeeper</h4>
+         <div style="width: 120px; display: inline;&amp;quot;">
+          <canvas width="120" height="120"></canvas>
+          <input class="knob" data-readonly="true" data-width="120"
+           data-min="0" data-angleoffset="0" data-displayprevious="true"
+           value="70" data-fgcolor="#cfdee7" data-bgcolor="#0d4667"
+           readonly="readonly"
+           style="width: 60px; position: absolute; margin-top: 42.8571428571429px; margin-left: -90px; font-size: 30px; border: none; font-family: Arial; font-weight: bold; text-align: center; color: rgb(207, 222, 231); padding: 0px; -webkit-appearance: none; background: none;">
+         </div>
+        </div>
+       </div>
+       <div class="one_fourth">
+        <div class="column_content">
+         <h4 class="blue" style="color: white;">Spring</h4>
+         <div style="width: 120px; display: inline;&amp;quot;">
+          <canvas width="120" height="120"></canvas>
+          <input class="knob" data-readonly="true" data-width="120"
+           data-min="0" data-angleoffset="0" data-displayprevious="true"
+           value="85" data-fgcolor="#cfdee7" data-bgcolor="#0d4667"
+           readonly="readonly"
+           style="width: 60px; position: absolute; margin-top: 42.8571428571429px; margin-left: -90px; font-size: 30px; border: none; font-family: Arial; font-weight: bold; text-align: center; color: rgb(207, 222, 231); padding: 0px; -webkit-appearance: none; background: none;">
+         </div>
+        </div>
+       </div>
+       <div class="one_fourth last">
+        <div class="column_content">
+         <h4 class="blue" style="color: white;">Git</h4>
+         <div style="width: 120px; display: inline;&amp;quot;">
+          <canvas width="120" height="120"></canvas>
+          <input class="knob" data-readonly="true" data-width="120"
+           data-min="0" data-angleoffset="0" data-displayprevious="true"
+           value="90" data-fgcolor="#cfdee7" data-bgcolor="#0d4667"
+           readonly="readonly"
+           style="width: 60px; position: absolute; margin-top: 42.8571428571429px; margin-left: -90px; font-size: 30px; border: none; font-family: Arial; font-weight: bold; text-align: center; color: rgb(207, 222, 231); padding: 0px; -webkit-appearance: none; background: none;">
+         </div>
+        </div>
+       </div>
+       <div class="clear"></div>
       </div>
      </div>
-     <div class="one_fourth">
-      <div class="column_content">
-       <h4 class="blue" style="color: white;">Zookeeper</h4>
-       <div style="width:120px;display:inline;&quot;"><canvas width="120" height="120"></canvas><input class="knob" data-readonly="true" data-width="120" data-min="0" data-angleoffset="0" data-displayprevious="true" value="70" data-fgcolor="#cfdee7" data-bgcolor="#0d4667" readonly="readonly" style="width: 60px; position: absolute; margin-top: 42.8571428571429px; margin-left: -90px; font-size: 30px; border: none; font-family: Arial; font-weight: bold; text-align: center; color: rgb(207, 222, 231); padding: 0px; -webkit-appearance: none; background: none;"></div>
+     <div class="copyrights">
+      Collect from <a href="#">网站首页</a>
+     </div>
+     <div class="page" id="industries">
+      <!-- page industries -->
+      <h3 class="page_title">基础必备</h3>
+      <div class="page_content">
+       <p></p>
+       <div class="space"></div>
+       <div class="clear"></div>
+       <ul class="sublist">
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">SpringMVC</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">SpringBoot</a></li>
+        <li
+         style="font-size: 17px; font-weight: bold; font-weight: bold;"><a
+         href="#">Restful</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">Gerrit</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">Redis</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">ActiveMQ</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">Nginx</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">Apache</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">MySQL</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">Oracle</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">Mybatis</a></li>
+        <li style="font-size: 17px; font-weight: bold;"><a href="#">Hibernate</a></li>
+       </ul>
+       <div class="clear"></div>
+       <blockquote style="font-size: 17px">
+        <p>
+         <b>图书小系统:&nbsp;&nbsp;<a style="color: lime;"
+          href="http://www.shopbop.ink/bookmanager/indexHome"
+          target="_bank">indexHome</a></b>
+        </p>
+        <p>
+         <b>项目gitHub:&nbsp;&nbsp;<a style="color: lime;"
+          href="https://github.com/chenchaoyun0" target="_bank">https://chenchaoyun0</a></b>
+        </p>
+        <p>
+         <b>博客:&nbsp;&nbsp;<a style="color: lime;"
+          href="http://blog.csdn.net/sinat_22767969" target="_bank">http://sinat_22767969</a></b>
+        </p>
+        <p>
+         <b>Gerrit:&nbsp;&nbsp;<a style="color: lime;"
+          href="http://www.shopbop.ink/gerrit" target="_bank">http://gerrit</a></b>
+        </p>
+        <p>
+         <b>Jenkins:&nbsp;&nbsp;<a style="color: lime;"
+          href="http://www.lilinjue.cn:8081/" target="_bank">http://jenkins</a></b>
+        </p>
+        <p>
+         <b>ActiveMQ:&nbsp;&nbsp;<a style="color: lime;"
+          href="http://www.lilinjue.cn:8161/admin/queues.jsp"
+          target="_bank">http://ActiveMQ</a></b>
+        </p>
+        <p>
+         <b>nexus私服库:&nbsp;&nbsp;<a style="color: lime;"
+          href="http://www.lilinjue.cn:8080/nexus" target="_bank">http://nexus</a></b>
+        </p>
+        <p>
+         <b>Zookeeper节点管理:&nbsp;&nbsp;<a style="color: lime;"
+          href="http://www.shopbop.ink/zkWeb/" target="_bank">http://zkWeb</a></b>
+        </p>
+        <p>
+         <b>Dubbo:&nbsp;&nbsp;<a style="color: lime;"
+          href="http://www.shopbop.ink:8081/dubbo-admin" target="_bank">http://dubbo-admin</a></b>
+        </p>
+       </blockquote>
       </div>
      </div>
-     <div class="one_fourth">
-      <div class="column_content">
-       <h4 class="blue" style="color: white;">Spring</h4>
-       <div style="width:120px;display:inline;&quot;"><canvas width="120" height="120"></canvas><input class="knob" data-readonly="true" data-width="120" data-min="0" data-angleoffset="0" data-displayprevious="true" value="85" data-fgcolor="#cfdee7" data-bgcolor="#0d4667" readonly="readonly" style="width: 60px; position: absolute; margin-top: 42.8571428571429px; margin-left: -90px; font-size: 30px; border: none; font-family: Arial; font-weight: bold; text-align: center; color: rgb(207, 222, 231); padding: 0px; -webkit-appearance: none; background: none;"></div>
+    </div>
+    <div class="page" id="about">
+     <!-- page about -->
+     <h3 class="page_title">我的自评</h3>
+     <div class="page_content">
+      <p style="text-indent: 2em">
+       我是一名热衷于IT行业的JAVA工程师，热爱编程，对技术有很大的求知欲，喜欢将多个人的技术合并到一起生成新的东西。我一直以“严谨、专注、虚心”鞭策自己，我喜欢学习，并且有较强的学习能力。<br>
+       &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我不是一个简单纯粹的人，我追求卓越，具有Geek特质，我能做事做实事，我相信您的团队正需要像我这样的人加入。
+      </p>
+      <h4 class="blue">Java之开发历程</h4>
+      <p style="text-indent: 2em">
+       曾在大学期间，参加腾讯云校园计划，获云服务器与域名，用于学习Linux
+       并在大三利用周末时间参加校外培训，搭建个人网站。现今在阿里云与腾讯云均有应用服务。<br>
+      </p>
+      <blockquote style="font-size: 15px">
+       <p>
+        <b>在校外培训机构表现成绩优异突出，担任过小组组长</b>
+       </p>
+       <p>
+        <b>校外培训机构结训项目获机构评优并作为后期学员的参考模板。</b>
+       </p>
+       <p>
+        <b>在2016年公司年会上，代表公司同期入职应届生做年终工作总结</b>
+       </p>
+       <p>
+        <b>现就职于 旷视科技(Face++)</b>
+       </p>
+      </blockquote>
+      <div class="clear"></div>
+     </div>
+    </div>
+    <div class="page" id="portfolio">
+     <!-- page portfolio -->
+     <h3 class="page_title">项目展示</h3>
+     <div class="page_content">
+      <p style="text-indent: 2em">
+       做软件开发是一个不断学习的过程，你停住脚步就会被别人超越。刚好~很幸运，我喜欢技术，也喜欢这个学习的过程。别人觉得无聊的东西，我却乐在其中。
+      </p>
+      <ul id="works_filter">
+       <li><a href="#" data-filter="*" class="selected">Show
+         All</a></li>
+       <li><a href="#" data-filter=".css">SpringBoot</a></li>
+       <li><a href="#" data-filter=".html_php">Devps</a></li>
+       <li><a href="#" data-filter=".js">Apps</a></li>
+      </ul>
+      <div class="clear"></div>
+      <div id="works" class="isotope"
+       style="position: relative; overflow: hidden; height: 540px;">
+       <!-- works -->
+       <a rel="prettyPhoto[gallery]" href="images/01.jpg"> <img
+        class="work js isotope-item" src="images/01.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(0px, 0px, 0px);">
+       </a><a rel="prettyPhoto[gallery]" href="images/02.jpg"> <img
+        class="work css isotope-item" src="images/02.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(241px, 0px, 0px);">
+       </a><a rel="prettyPhoto[gallery]" href="images/04.jpg"> <img
+        class="work html_php isotope-item" src="images/04.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(482px, 0px, 0px);">
+       </a><a rel="prettyPhoto[gallery]" href="images/05.jpg"> <img
+        class="work html_php isotope-item" src="images/05.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(0px, 180px, 0px);">
+       </a><a rel="prettyPhoto[gallery]" href="images/06.jpg"> <img
+        class="work css isotope-item" src="images/06.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(241px, 180px, 0px);">
+       </a><a rel="prettyPhoto[gallery]" href="images/07.jpg"> <img
+        class="work js isotope-item" src="images/07.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(482px, 180px, 0px);">
+       </a><a rel="prettyPhoto[gallery]" href="images/08.jpg"> <img
+        class="work html_php isotope-item" src="images/08.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(0px, 360px, 0px);">
+       </a><a rel="prettyPhoto[gallery]" href="images/09.jpg"> <img
+        class="work js isotope-item" src="images/09.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(241px, 360px, 0px);">
+       </a><a rel="prettyPhoto[gallery]" href="images/10.jpg"> <img
+        class="work html_php isotope-item" src="images/10.jpg" alt=""
+        style="position: absolute; left: 0px; top: 0px; transform: translate3d(482px, 360px, 0px);">
+       </a>
       </div>
+      <div class="clear"></div>
      </div>
-     <div class="one_fourth last">
-      <div class="column_content">
-       <h4 class="blue" style="color: white;">Git</h4>
-       <div style="width:120px;display:inline;&quot;"><canvas width="120" height="120"></canvas><input class="knob" data-readonly="true" data-width="120" data-min="0" data-angleoffset="0" data-displayprevious="true" value="90" data-fgcolor="#cfdee7" data-bgcolor="#0d4667" readonly="readonly" style="width: 60px; position: absolute; margin-top: 42.8571428571429px; margin-left: -90px; font-size: 30px; border: none; font-family: Arial; font-weight: bold; text-align: center; color: rgb(207, 222, 231); padding: 0px; -webkit-appearance: none; background: none;"></div>
-      </div>
-     </div>
-     <div class="clear"></div>
     </div>
-   </div>
-   <div class="copyrights">
-    Collect from <a href="#">网站首页</a>
-   </div>
-   <div class="page" id="industries">
-    <!-- page industries -->
-    <h3 class="page_title">基础必备</h3>
-    <div class="page_content">
-     <p>
-     
-     </p>
-     <div class="space"></div>
-     <div class="clear"></div>
-     <ul class="sublist">
-      <li style="font-size:17px;font-weight: bold;"><a href="#">SpringMVC</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">SpringBoot</a></li>
-      <li style="font-size:17px;font-weight: bold;font-weight: bold;"><a href="#">Restful</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">Gerrit</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">Redis</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">ActiveMQ</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">Nginx</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">Apache</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">MySQL</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">Oracle</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">Mybatis</a></li>
-      <li style="font-size:17px;font-weight: bold;"><a href="#">Hibernate</a></li>
-     </ul>
-     <div class="clear"></div>
-      <blockquote style="font-size: 17px">
-      <p>
-       <b>图书小系统:&nbsp;&nbsp;<a style="color: lime;" href="http://www.shopbop.ink/bookmanager/indexHome" target="_bank">indexHome</a></b>
-      </p>
-      <p>
-       <b>项目gitHub:&nbsp;&nbsp;<a style="color: lime;" href="https://github.com/chenchaoyun0" target="_bank">https://chenchaoyun0</a></b>
-      </p>
-      <p>
-       <b>博客:&nbsp;&nbsp;<a style="color: lime;" href="http://blog.csdn.net/sinat_22767969" target="_bank">http://sinat_22767969</a></b>
-      </p>
-      <p>
-       <b>Gerrit:&nbsp;&nbsp;<a style="color: lime;" href="http://www.shopbop.ink/gerrit" target="_bank">http://gerrit</a></b>
-      </p>
-      <p>
-       <b>Jenkins:&nbsp;&nbsp;<a style="color: lime;" href="http://www.lilinjue.cn:8081/" target="_bank">http://jenkins</a></b>
-      </p>
-      <p>
-       <b>ActiveMQ:&nbsp;&nbsp;<a style="color: lime;" href="http://www.lilinjue.cn:8161/admin/queues.jsp" target="_bank">http://ActiveMQ</a></b>
-      </p>
-      <p>
-       <b>nexus私服库:&nbsp;&nbsp;<a style="color: lime;" href="http://www.lilinjue.cn:8080/nexus" target="_bank">http://nexus</a></b>
-      </p>
-      <p>
-       <b>Zookeeper节点管理:&nbsp;&nbsp;<a style="color: lime;" href="http://www.shopbop.ink/zkWeb/" target="_bank">http://zkWeb</a></b>
-      </p>
-      <p>
-       <b>Dubbo:&nbsp;&nbsp;<a style="color: lime;" href="http://www.shopbop.ink:8081/dubbo-admin" target="_bank">http://dubbo-admin</a></b>
-      </p>
-     </blockquote>
-    </div>
-   </div>
-   </div>
-   <div class="page" id="about">
-    <!-- page about -->
-    <h3 class="page_title">我的自评</h3>
-    <div class="page_content">
-     <p style="text-indent: 2em">
-      我是一名热衷于IT行业的JAVA工程师，热爱编程，对技术有很大的求知欲，喜欢将多个人的技术合并到一起生成新的东西。我一直以“严谨、专注、虚心”鞭策自己，我喜欢学习，并且有较强的学习能力。<br>
-      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;我不是一个简单纯粹的人，我追求卓越，具有Geek特质，我能做事做实事，我相信您的团队正需要像我这样的人加入。
-     </p>
-     <h4 class="blue">Java之开发历程</h4>
-     <p style="text-indent: 2em">
-曾在大学期间，参加腾讯云校园计划，获云服务器与域名，用于学习Linux
-并在大三利用周末时间参加校外培训，搭建个人网站。现今在阿里云与腾讯云均有应用服务。<br>
-</p>
- <blockquote style="font-size: 15px">
-      <p>
-       <b>在校外培训机构表现成绩优异突出，担任过小组组长</b>
-      </p>
-      <p>
-       <b>校外培训机构结训项目获机构评优并作为后期学员的参考模板。</b>
-      </p>
-      <p>
-       <b>在2016年公司年会上，代表公司同期入职应届生做年终工作总结</b>
-      </p>
-      <p>
-       <b>现就职于 旷视科技(Face++)</b>
-      </p>
-     </blockquote>
-     <div class="clear"></div>
-    </div>
-   </div>
-   <div class="page" id="portfolio">
-    <!-- page portfolio -->
-    <h3 class="page_title">项目展示</h3>
-    <div class="page_content">
-     <p style="text-indent: 2em">
-     做软件开发是一个不断学习的过程，你停住脚步就会被别人超越。刚好~很幸运，我喜欢技术，也喜欢这个学习的过程。别人觉得无聊的东西，我却乐在其中。
-     </p>
-     <ul id="works_filter">
-      <li><a href="#" data-filter="*" class="selected">Show All</a></li>
-      <li><a href="#" data-filter=".css">SpringBoot</a></li>
-      <li><a href="#" data-filter=".html_php">Devps</a></li>
-      <li><a href="#" data-filter=".js">Apps</a></li>
-     </ul>
-     <div class="clear"></div>
-     <div id="works" class="isotope" style="position: relative; overflow: hidden; height: 540px;">
-      <!-- works -->
-      <a rel="prettyPhoto[gallery]" href="images/01.jpg">
-       <img class="work js isotope-item" src="images/01.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(0px, 0px, 0px);">
-      </a><a rel="prettyPhoto[gallery]" href="images/02.jpg">
-       <img class="work css isotope-item" src="images/02.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(241px, 0px, 0px);">
-      </a><a rel="prettyPhoto[gallery]" href="images/04.jpg">
-       <img class="work html_php isotope-item" src="images/04.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(482px, 0px, 0px);">
-      </a><a rel="prettyPhoto[gallery]" href="images/05.jpg">
-       <img class="work html_php isotope-item" src="images/05.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(0px, 180px, 0px);">
-      </a><a rel="prettyPhoto[gallery]" href="images/06.jpg">
-       <img class="work css isotope-item" src="images/06.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(241px, 180px, 0px);">
-      </a><a rel="prettyPhoto[gallery]" href="images/07.jpg">
-       <img class="work js isotope-item" src="images/07.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(482px, 180px, 0px);">
-      </a><a rel="prettyPhoto[gallery]" href="images/08.jpg">
-       <img class="work html_php isotope-item" src="images/08.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(0px, 360px, 0px);">
-      </a><a rel="prettyPhoto[gallery]" href="images/09.jpg">
-       <img class="work js isotope-item" src="images/09.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(241px, 360px, 0px);">
-      </a><a rel="prettyPhoto[gallery]" href="images/10.jpg">
-       <img class="work html_php isotope-item" src="images/10.jpg" alt="" style="position: absolute; left: 0px; top: 0px; transform: translate3d(482px, 360px, 0px);">
-      </a>
-     </div>
-     <div class="clear"></div>
-    </div>
-   </div>
-   <!--  -->
-   <div style="margin-left: 30px">
-   <div class="one_half first">
+    <!--  -->
+    <div style="margin-left: 30px">
+     <div class="one_half first">
       <div class="column_content">
        <h4>Coded in Love</h4>
-       <img src="m2/images/coded-with-love.png" class="left no_border" alt="" style="margin-top: 10px; margin-right: 10px">
+       <img src="m2/images/coded-with-love.png" class="left no_border"
+        alt="" style="margin-top: 10px; margin-right: 10px">
        <p>
-        <small>
-        假如多年后，我也成为那所谓的大牛时，我将会以怎样的视角与深度去看待那最初的hello world ？我有所期待
-        </small>
+        <small> 假如多年后，我也成为那所谓的大牛时，我将会以怎样的视角与深度去看待那最初的hello world
+         ？我有所期待 </small>
        </p>
       </div>
      </div>
      <div class="one_half last">
       <div class="column_content">
        <h4>Learn to accumulate</h4>
-       <img src="m2/images/responsive.png" class="left no_border" alt="" style="margin-top: 10px; margin-right: 10px">
+       <img src="m2/images/responsive.png" class="left no_border" alt=""
+        style="margin-top: 10px; margin-right: 10px">
        <p>
-        <small>
-        不积跬步，无以至千里；不积小流，无以成江海。
-        </small>
+        <small> 不积跬步，无以至千里；不积小流，无以成江海。 </small>
        </p>
       </div>
      </div>
@@ -417,22 +414,20 @@ if (document.URL.indexOf("iqiyi.com") >= 0){
      <div class="one_half first">
       <div class="column_content">
        <h4>Keep good habit</h4>
-       <img src="m2/images/for-portfolio.png" class="left no_border" alt="" style="margin-top: 10px; margin-right: 10px">
+       <img src="m2/images/for-portfolio.png" class="left no_border"
+        alt="" style="margin-top: 10px; margin-right: 10px">
        <p>
-        <small>
-        习惯决定性格，性格决定成败
-        </small>
+        <small> 习惯决定性格，性格决定成败 </small>
        </p>
       </div>
      </div>
      <div class="one_half last">
       <div class="column_content">
-       <h4>Speaking is art </h4>
-       <img src="m2/images/customizable.png" class="left no_border" alt="" style="margin-top: 10px; margin-right: 10px">
+       <h4>Speaking is art</h4>
+       <img src="m2/images/customizable.png" class="left no_border"
+        alt="" style="margin-top: 10px; margin-right: 10px">
        <p>
-        <small>
-        说话是一种艺术，学会与人交流
-        </small>
+        <small> 说话是一种艺术，学会与人交流 </small>
        </p>
       </div>
      </div>
@@ -440,30 +435,28 @@ if (document.URL.indexOf("iqiyi.com") >= 0){
      <div class="one_half first">
       <div class="column_content">
        <h4>Modesty,kind of virtue</h4>
-       <img src="m2/images/image-gallery.png" class="left no_border" alt="" style="margin-top: 10px; margin-right: 10px">
+       <img src="m2/images/image-gallery.png" class="left no_border"
+        alt="" style="margin-top: 10px; margin-right: 10px">
        <p>
-        <small>
-        谦虚是一种美德，懂得谦让的人讨人喜欢
-        </small>
+        <small> 谦虚是一种美德，懂得谦让的人讨人喜欢 </small>
        </p>
       </div>
      </div>
      <div class="one_half last">
       <div class="column_content">
        <h4>Responsibility</h4>
-       <img src="m2/images/jquery-code.png" class="left no_border" alt="" style="margin-top: 10px; margin-right: 10px">
+       <img src="m2/images/jquery-code.png" class="left no_border"
+        alt="" style="margin-top: 10px; margin-right: 10px">
        <p>
-        <small>
-        在岗一天则职责所在，不愧于人，无愧于心
-        </small>
+        <small> 在岗一天则职责所在，不愧于人，无愧于心 </small>
        </p>
       </div>
      </div>
      <div class="clear"></div>
     </div>
-    </div>
+   </div>
    <!--  -->
-   
+
    <div class="page" id="contact">
     <!-- page contact -->
     <h3 class="page_title">Let's Get in Touch</h3>
@@ -471,21 +464,36 @@ if (document.URL.indexOf("iqiyi.com") >= 0){
      <fieldset id="contact_form">
       <div id="msgs"></div>
       <form id="cform" name="cform" method="post" action="">
-       <input type="text" id="name" name="name" value="Full Name*" onfocus="if(this.value == &#39;Full Name*&#39;) this.value = &#39;&#39;" onblur="if(this.value == &#39;&#39;) this.value = &#39;Full Name*&#39;"> <input type="text" id="email" name="email" value="Email Address*" onfocus="if(this.value == &#39;Email Address*&#39;) this.value = &#39;&#39;" onblur="if(this.value == &#39;&#39;) this.value = &#39;Email Address*&#39;">
-       <input type="text" id="subject" name="subject" value="Subject*" onfocus="if(this.value == &#39;Subject*&#39;) this.value = &#39;&#39;" onblur="if(this.value == &#39;&#39;) this.value = &#39;Subject*&#39;">
-       <textarea id="msg" name="message" onfocus="if(this.value == &#39;Your Message*&#39;) this.value = &#39;&#39;" onblur="if(this.value == &#39;&#39;) this.value = &#39;Your Message*&#39;">Your Message*</textarea>
-       <button id="submit" class="button" onclick="window.location.href=&#39;http://wpa.qq.com/msgrd?v=3&amp;uin=873692191&#39;">Send Message</button>
+       <input type="text" id="name" name="name" value="Full Name*"
+        onfocus="if(this.value == &#39;Full Name*&#39;) this.value = &#39;&#39;"
+        onblur="if(this.value == &#39;&#39;) this.value = &#39;Full Name*&#39;">
+       <input type="text" id="email" name="email" value="Email Address*"
+        onfocus="if(this.value == &#39;Email Address*&#39;) this.value = &#39;&#39;"
+        onblur="if(this.value == &#39;&#39;) this.value = &#39;Email Address*&#39;">
+       <input type="text" id="subject" name="subject" value="Subject*"
+        onfocus="if(this.value == &#39;Subject*&#39;) this.value = &#39;&#39;"
+        onblur="if(this.value == &#39;&#39;) this.value = &#39;Subject*&#39;">
+       <textarea id="msg" name="message"
+        onfocus="if(this.value == &#39;Your Message*&#39;) this.value = &#39;&#39;"
+        onblur="if(this.value == &#39;&#39;) this.value = &#39;Your Message*&#39;">Your Message*</textarea>
+       <button id="submit" class="button"
+        onclick="window.location.href=&#39;http://wpa.qq.com/msgrd?v=3&amp;uin=873692191&#39;">Send
+        Message</button>
       </form>
      </fieldset>
      <div class="clear"></div>
      <ul class="social_icons">
-      <li><a href="https://github.com/chenchaoyun0" target="_bank" id="fb" original-title="Join My Fan Club">
-        <img height="26px" src="logo/github.png" alt="Facebook">
+      <li><a href="https://github.com/chenchaoyun0" target="_bank"
+       id="fb" original-title="Join My Fan Club"> <img height="26px"
+        src="logo/github.png" alt="Facebook">
       </a></li>
-      <li><a target="_bank" href="https://www.linkedin.com/in/%E8%B6%85%E5%85%81-%E9%99%88-86881a102/" id="ld" original-title="Find me on LinkedIn">
-        <img src="logo/linkedin.png" alt="LinkedIn">
+      <li><a target="_bank"
+       href="https://www.linkedin.com/in/%E8%B6%85%E5%85%81-%E9%99%88-86881a102/"
+       id="ld" original-title="Find me on LinkedIn"> <img
+        src="logo/linkedin.png" alt="LinkedIn">
       </a></li>
-      <li><a href="http://blog.csdn.net/sinat_22767969" target="_bank" id="tw" original-title="Follow Me on Twitter">
+      <li><a href="http://blog.csdn.net/sinat_22767969"
+       target="_bank" id="tw" original-title="Follow Me on Twitter">
         <img height="26px" src="logo/csdn.png" alt="Twitter">
       </a></li>
      </ul>
@@ -494,10 +502,13 @@ if (document.URL.indexOf("iqiyi.com") >= 0){
    <div class="footer">
     <p>© 2017 .chenchaoyun0.</p>
     <p>
-     More Templates <a href="http://www.shopbop.ink/" target="_blank" title="网站主页">陈超允-网站主页</a> - Collect from <a href="http://www.shopbop.ink/" title="网站主页" target="_blank">网站主页</a>
+     More Templates <a href="http://www.shopbop.ink/" target="_blank"
+      title="网站主页">陈超允-网站主页</a> - Collect from <a
+      href="http://www.shopbop.ink/" title="网站主页" target="_blank">网站主页</a>
     </p>
    </div>
   </div>
  </div>
  <a class="gotop hidden" href="#top">Top</a>
-</body></html>
+</body>
+</html>
