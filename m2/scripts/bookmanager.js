@@ -1,7 +1,7 @@
 $(function() {
 	$.ajax({
 		type : 'POST',
-		url : "http://www.shopbop.ink:9090/bookmanager/lookResume",
+		url : "http://127.0.0.1:9090/bookmanager/lookResume",
 		contentType: "application/json; charset=utf-8",
         data: JSON.stringify(GetJsonData()),
         dataType:'json',
